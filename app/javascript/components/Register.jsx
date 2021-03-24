@@ -1,11 +1,10 @@
 import React from 'react'
 import User from './User'
 
-export default function Login() {
-
+export default function Register() {
     return (
         <div>
-            <User type='Login'/>
+            <User type='Registration'/>
         </div>
     )
 }

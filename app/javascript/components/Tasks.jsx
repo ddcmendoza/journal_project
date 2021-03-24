@@ -23,14 +23,16 @@ export default function Tasks() {
     }, [])
     return (
         <div className="d-flex flex-column container">
-            <Home/>
-            <h2 className="text-decoration-underline">Tasks</h2>
-            {console.log(tasks)}
-            {
-                Object.keys(tasks).map(t =>(
-                    <div key={t}>{tasks[t].name}</div>
-                ))
-            }
+            <div className='container'>
+                <h2 className="text-decoration-underline">Tasks</h2>
+                {//console.log(tasks)
+                }
+                {
+                    Object.keys(tasks).map(t =>(
+                        <div key={t}>{tasks[t].name}</div>
+                    ))
+                }
+            </div>
         </div>
     )
 }

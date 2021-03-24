@@ -17,14 +17,16 @@ export default function Categories() {
     }, [])
     return (
         <div className="d-flex flex-column container">
-            <Home/>
-            <h2 className="text-decoration-underline">Categories</h2>
-            {console.log(categories)}
-            {
-                Object.keys(categories).map(c =>(
-                    <div key={c}>{categories[c].name}</div>
-                ))
-            }
+            <div className='container'>
+                <h2 className="text-decoration-underline">Categories</h2>
+                {//console.log(categories)
+                }
+                {
+                    Object.keys(categories).map(c =>(
+                        <div key={c}>{categories[c].name}</div>
+                    ))
+                }
+            </div>
         </div>
     )
 }

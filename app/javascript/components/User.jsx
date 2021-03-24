@@ -1,14 +1,76 @@
 import Header from './Header'
-import React, {useState} from 'react'
-export default function User() {
-    const [pwtype, setPwtype] = useState('password')
+import NavBar from './NavBar'
+import React, {useState,useEffect} from 'react'
+import {Link,useHistory} from "react-router-dom"
+import axios from 'axios'
+export default function User(props) {
+    const cancelToken = axios.CancelToken;
+    const source = cancelToken.source();
+    const history = useHistory();
+    const [isLoading, setIsLoading] = useState(true);
+    const [pwtype, setPwtype] = useState('password');
     const [name,setName] = useState(null);
     const [pw, setPW] = useState(null);
     const [username, setUsername] = useState(null);
+    useEffect(() => {
+        setIsLoading(false);
+        return () => {
+            source.cancel('Cancelling axios request/s!')
+        }
+    }, [])
     function onSubmit(e){
         e.preventDefault();
+        switch(props.type){
+            case 'Registration':
 
-        console.log(name,pw,username)
+                let user = {
+                    username: username,
+                    name: name,
+                    password: pw
+                }
+                axios.post('/api/v1/users/create', { user }, { withCredentials: true, cancelToken: source.token })
+                    .then(response => {
+                        if (response.data.status === 'created') {
+                            console.log('Congratulations! You registered!')
+                            history.push('/login');
+                        } else {
+                            console.log('There was an error!')
+                            console.log(response)
+                            console.log(response.data.errors)
+                        }
+                    })
+                    .catch(error => console.log('api errors:', error));      
+                break;
+            case 'Login':
+                user = {
+                    username: username,
+                    password: pw
+                }
+                axios.post('/login', { user }, { withCredentials: true , cancelToken: source.token})
+                    .then(response => {
+                        if (response.data.logged_in) {
+                            console.log('Success');
+                            console.log(response);
+                            history.push({
+                                pathname:'/',
+                                state: {
+                                    logged_in: response.data.logged_in,
+                                    user: response.user
+                                }
+                            })
+                        } else {
+                            console.log('There was an error!')
+                            console.log(response)
+                            console.log(response.data.errors)
+                        }
+                    })
+                    .catch(error => console.log('api errors:', error))
+                break;
+            case 'Update':
+                break;
+            default:
+                console.log(name,pw,username)
+        }
     }
     function onType(e){
         e.preventDefault();
@@ -29,26 +91,50 @@ export default function User() {
     }
     return (
         <div className="container">
+            <NavBar/>
+        {isLoading && <div className="container">Wait a moment, it's still loading</div>}
+        {!isLoading &&
+        <div className="container">
+            
             <Header/>
-            <h1>Registration</h1>
+            <h1>{props.type}</h1>
+{       props.type === 'Login' &&
+        <div className ="text-primary">
+            <Link to="/register" role='button'>
+                Create an account
+            </Link>
+        </div>
+}
+{       props.type === 'Registration' &&
+        <div className ="text-primary">
+            <Link to="/login" role='button'>
+                Already have an account?
+            </Link>
+        </div>
+}
             <form>
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">Username</label>
                     <input type="text" className="form-control" id="username" placeholder="iLoveJournals" onChange={onType}/>
                     </div>
+                {props.type === 'Registration' &&
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Name</label>
                     <input type='text' className="form-control" id="name" placeholder="Journal L. Over" onChange={onType}/>
                     </div>
+                }
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
                     <div className="d-flex align-items-stretch justify-content-evenly">
                         <input type={pwtype} className="form-control col-9" id="password" onChange={onType} defaultValue="password" />
-                        <button className='btn btn-primary mx-1 col-3' onClick={handleClick}>Show Password</button>
+                        <a className='btn btn-primary mx-1 col-3' onClick={handleClick}>Show Password</a>
                     </div>
                     </div>
                     <input type='submit' onClick={onSubmit}></input>
             </form>
+        </div>
+}
+
         </div>
     )
 }
