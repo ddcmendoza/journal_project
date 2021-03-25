@@ -49,10 +49,6 @@ export default function Home(props) {
       })
       .catch(error => console.log('api errors:', error))
 
-    if(location?.state?.logged_in){
-      setIsLoggedIn(location.state.logged_in)
-      setUser(location.state.user)
-    }
   }
     if(props?.view){
       setView(props.view)

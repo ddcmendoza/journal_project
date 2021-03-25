@@ -58,17 +58,20 @@ class Api::V1::UsersController < ApplicationController
       @user.update(password: params[:user][:password])
     end
 
-    if @user.save
-      render json: {
-        status: :updated,
-        user: @user
+    if session[:user_id] == params[:id]
+      if@user.save
+        render json: {
+          status: :updated,
+          user: @user
+        }
+      else
+        render json: {
+          status: 500,
+          errors: @user.errors.full_messages,
       }
+      end
     else
-      render json: {
-        status: 500,
-        errors: @user.errors.full_messages,
-        debug: params[:user]
-    }
+      render json: "You don't have authorization to do that"
     end
 
   end

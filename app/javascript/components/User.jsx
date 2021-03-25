@@ -92,7 +92,13 @@ export default function User(props) {
     return (
         <div className="container">
             <NavBar/>
-        {isLoading && <div className="container">Wait a moment, it's still loading</div>}
+            {isLoading && 
+            <div className="text-center">
+                <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            }
         {!isLoading &&
         <div className="container">
             
@@ -130,7 +136,7 @@ export default function User(props) {
                         <a className='btn btn-primary mx-1 col-3' onClick={handleClick}>Show Password</a>
                     </div>
                     </div>
-                    <input type='submit' onClick={onSubmit}></input>
+                    <input type='submit' className="btn btn-info" onClick={onSubmit}></input>
             </form>
         </div>
 }
