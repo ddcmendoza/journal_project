@@ -10,7 +10,7 @@ export default function NavBar(props) {
             className="btn btn-lg custom-button"
             role="button"
           >
-            Tasks
+           All Tasks
           </Link>
           <Link
             to="/categories"
@@ -21,16 +21,16 @@ export default function NavBar(props) {
           </Link>
           </span>
       }
-      {!props.isLoggedIn &&
+     {/*  {!props.isLoggedIn &&
             <span>
               <span className="btn btn-lg custom-button" style={{cursor: 'default'}}>
-                       Tasks
+                       All Tasks
               </span>
               <span className="btn btn-lg custom-button" style={{cursor: 'default'}}>
             Categories
             </span>
             </span>
-      }
+      } */}
           {!props.isLoggedIn &&
           <Link
           to="/login"

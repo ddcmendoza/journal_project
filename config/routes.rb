@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       delete 'tasks/destroy/:id', to: 'tasks#destroy'
       patch 'tasks/update/:id', to: 'tasks#update'
 
-      #get 'categories/index'
+      get 'categories/index'
       post 'categories/create'
       get 'categories/index/by-user-id/:uid', to: 'categories#by_user_id'
       get 'categories/show/:id', to: 'categories#show'

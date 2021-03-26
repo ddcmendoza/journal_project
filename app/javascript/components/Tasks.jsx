@@ -1,15 +1,73 @@
 import React, {useEffect, useState} from 'react'
 import Create from './Create'
+import { useLocation, useHistory } from "react-router-dom";
+import axios from 'axios'
+import TaskCard from './TaskCard'
+import TaskView from './TaskView'
 
 export default function Tasks(props) {
+    const cancelToken = axios.CancelToken;
+    const source = cancelToken.source();
+    const location = useLocation();
+    const history = useHistory();
     const [tasks,setTasks] = useState({});
     const [add, setAdd] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [task, setTask] = useState(null);
     function addButtonClick(){
         console.log('fired')
         setAdd(true);
+        setTask(null);
     }    
+    function deleteTask(e){
+        e.preventDefault();
+        const task_id = e.target.id;
+        axios.delete(`/api/v1/tasks/destroy/${task_id}`, { withCredentials: true, cancelToken: source.token })
+                    .then(response => {
+                        if (response.data.status === 'deleted') {
+                            history.push({
+                                pathname:'/tasks',
+                                state: {
+                                    add: false
+                                }
+                            })
+                            console.log(`${task_id} Task deleted`);
+                        } else {
+                            console.log('There was an error!')
+                            console.log(response)
+                            console.log(response.data.errors)
+                        }
+                    })
+                    .catch(error => console.log('api errors:', error));
+    }
+    function showClose(e){
+        e.target.children[0].classList.remove('visually-hidden');
+    }
+    function hideClose(e){
+        e.target.children[0].classList.add('visually-hidden');
+    }
+    function taskView(e){
+        e.preventDefault();
+        setAdd(false);
+        if (e.target.type != 'delete'){
+            setTask(tasks.filter(x=> x.id == e.target.id));
+        }
+    }
     useEffect(() => {
+        
+        if (location?.state){
+            setAdd(location.state.add);
+            setTask(location.state.task);
+        }
+
         const abCont = new AbortController();
+        const fetchCategories = async() =>{
+            let c = await fetch(`/api/v1/categories/index/`,{signal: abCont.signal}).catch(error => console.log('api errors:', error));
+            let c_json = await c?.json();
+            setCategories(c_json? c_json:[]);
+            console.log('fetching')
+        }
+        fetchCategories();
         const fetchTasks = async() =>{
             let t = await fetch(`/api/v1/tasks/index/by-user-id/${props.user.id}`,{
                 signal: abCont.signal,
@@ -31,23 +89,21 @@ export default function Tasks(props) {
                 <h2 className="">Tasks</h2>
                 <button type="button" className="btn btn-secondary mb-3 btn-sm" onClick={addButtonClick} href="#add"> Add New Task</button>
                 
-                {//console.log(tasks)
+                {//console.log(Object.keys(tasks),tasks)
                 }
                 <ul>
                     
                             
                 {
                     Object.keys(tasks).map(t =>(
-                            <li key={t}>
-                                <a>
-                                    <h4>{tasks[t].name}</h4>
-                                    <p>{tasks[t].details} Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt nemo nulla accusamus maxime consequuntur fuga, illo ipsam aut quisquam natus pariatur dignissimos sapiente delectus sequi. Nemo aperiam corrupti sint nulla!</p>
-                                </a>
-                            </li>
+                        <TaskView task ={tasks[t]} categories={categories} hideClose={hideClose} showClose={showClose} deleteTask={deleteTask} taskView={taskView}/>
+                            
                     ))
                 }
-                       {add && <div id="add"><Create type='Task'/></div>}
+                       
                 </ul>
+                {add && <><Create type='Task' categories={categories}/></>}
+                <TaskCard task={task} categories={categories}></TaskCard>
             </div>
         </div>
     )

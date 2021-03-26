@@ -13,6 +13,7 @@ export default function Categories(props) {
     const [category, setCategory] = useState(null);
     function addButtonClick(){
         setAdd(true);
+        setCategory(null);
     }
     function showClose(e){
         e.target.children[1].classList.remove('visually-hidden');
@@ -45,6 +46,7 @@ export default function Categories(props) {
     
     function categoryView(e){
         e.preventDefault();
+        setAdd(false);
         if (e.target.type != 'delete'){
             setCategory(categories.filter(x=> x.id == e.target.id));
         }
@@ -52,6 +54,7 @@ export default function Categories(props) {
     useEffect(() => {
         if (location?.state){
             setAdd(location.state.add);
+            setCategory(location.state.category);
         }
         const abCont = new AbortController();
         const fetchCategories = async() =>{
@@ -71,21 +74,21 @@ export default function Categories(props) {
             <div className='container'>
                 <h2 className=''>Categories</h2>
                 <button type="button" className="btn btn-secondary mb-3 btn-sm" onClick={addButtonClick}> Add New Category</button>
-                {//console.log(categories)
+                {console.log(categories)
                 }
 
               <div>
                     {
                         Object.keys(categories).map(c =>(
-                            <a key={categories[c].id} id={categories[c].id} catid={c} className='align-items-center btn btn-outline-secondary mr-2 mb-2' role='button' onMouseEnter={showClose} onMouseLeave={hideClose} onClick={categoryView}>
-                                <p className="p-0 m-0 d-inline" id={categories[c].id} catid={c}>{categories[c].name}</p>
-                                <button type="button" className="btn-close btn-close-white ml-1 visually-hidden" aria-label="Close" role="button" id={categories[c].id} onClick={deleteCategory} type="delete" catid={c}>
+                            <a key={categories[c].id} id={categories[c].id} className='align-items-center btn btn-outline-secondary mr-2 mb-2' role='button' onMouseEnter={showClose} onMouseLeave={hideClose} onClick={categoryView}>
+                                <p className="p-0 m-0 d-inline" id={categories[c].id}>{categories[c].name}</p>
+                                <button type="button" className="btn-close btn-close-white ml-1 visually-hidden" aria-label="Close" role="button" id={categories[c].id} onClick={deleteCategory} type="delete">
                                 </button>
                             </a>
                         ))
                     }
-                    {add && <><Create type='Category'/></>}
-                    <CategoryCard category={category}></CategoryCard>
+                    {add && <div className="mt-2"><Create type='Category'/></div>}
+                    <div className="mt-2"><CategoryCard category={category}></CategoryCard></div>
               </div>
             </div>
         </div>

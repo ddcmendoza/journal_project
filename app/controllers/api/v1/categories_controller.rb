@@ -1,5 +1,10 @@
 class Api::V1::CategoriesController < ApplicationController
   def index
+    if !!session[:user_id]
+      redirect_to action: "by_user_id", uid: session[:user_id]
+    else
+      render json: "Invalid Request"
+    end
   end
 
   def show
@@ -14,7 +19,7 @@ class Api::V1::CategoriesController < ApplicationController
   def create
     @category = Category.new(category_params)
     @category.user_id = session[:user_id]
-    if @category.save
+    if @category.save && !!session[:user_id]
         render json: {
         status: :created,
         category: @category
@@ -52,6 +57,10 @@ class Api::V1::CategoriesController < ApplicationController
   def destroy
     @category = Category.find(params[:id])
     if @category.destroy and @category.user_id == session[:user_id]
+      @tasks = Task.where(category_id: params[:id])
+      @tasks.each do |t|
+        t.destroy
+      end
       render json:{
         status: :deleted
       }
@@ -67,7 +76,7 @@ class Api::V1::CategoriesController < ApplicationController
 
   end
   def by_user_id
-    @categories = Category.where(user_id: params[:uid]).order("name ASC")
+    @categories = Category.where(user_id: params[:uid].to_i).order("name ASC")
     if session[:user_id] == params[:uid].to_i 
       render json: @categories
       else
