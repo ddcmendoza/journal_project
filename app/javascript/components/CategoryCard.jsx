@@ -54,7 +54,7 @@ export default function CategoryCard(props) {
             {//console.log(props.category?.[0],name,details)
             }
             {props.category &&
-            <form className='container-md col-8 shadow-sm'>
+            <form className='container-md col-8-md shadow-sm'>
                 <span className="badge bg-info text-dark mx-1">Edit</span>Category
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Name</label>
@@ -67,7 +67,10 @@ export default function CategoryCard(props) {
                 <button type='submit' className="btn btn-info mb-2" onClick={onSubmit}>Edit</button>
             </form>
 }
-            <TaskByCategory categoryID={props.category?.[0]?.id}/>
+            <div className="mt-3">
+                    {props.category && <h4 className="mb-1">Tasks </h4>}
+                <TaskByCategory categoryID={props.category?.[0]?.id}/>
+                </div>
         </div>
     )
 }

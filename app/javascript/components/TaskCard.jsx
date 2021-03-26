@@ -67,7 +67,7 @@ export default function TaskCard(props) {
             {//console.log(categoryID)
             }
             {props.task &&
-            <form className="container shadow-sm col-8">
+            <form className="container shadow-sm col-8-md" id="viewForm">
                 <span className="badge bg-info text-dark mx-1">Edit</span>Task
             <div className="mb-3">
                     <label htmlFor="name" className="form-label">Name</label>

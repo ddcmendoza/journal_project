@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState,useRef} from 'react'
 import Create from './Create'
 import { useLocation, useHistory } from "react-router-dom";
 import axios from 'axios'
@@ -6,6 +6,9 @@ import TaskCard from './TaskCard'
 import TaskView from './TaskView'
 
 export default function Tasks(props) {
+    const myRef = useRef(null)
+
+    const executeScroll = () => myRef.current.scrollIntoView() 
     const cancelToken = axios.CancelToken;
     const source = cancelToken.source();
     const location = useLocation();
@@ -15,7 +18,8 @@ export default function Tasks(props) {
     const [categories, setCategories] = useState([]);
     const [task, setTask] = useState(null);
     function addButtonClick(){
-        console.log('fired')
+
+        executeScroll();
         setAdd(true);
         setTask(null);
     }    
@@ -48,6 +52,7 @@ export default function Tasks(props) {
     }
     function taskView(e){
         e.preventDefault();
+        executeScroll();
         setAdd(false);
         if (e.target.type != 'delete'){
             setTask(tasks.filter(x=> x.id == e.target.id));
@@ -71,9 +76,7 @@ export default function Tasks(props) {
         const fetchTasks = async() =>{
             let t = await fetch(`/api/v1/tasks/index/by-user-id/${props.user.id}`,{
                 signal: abCont.signal,
-                headers:{
-                    Authenticate: 'True'
-                }});
+                });
             let t_json = await t.json();
             setTasks(t_json);
             console.log('fetching')
@@ -86,7 +89,7 @@ export default function Tasks(props) {
     return (
         <div className="d-flex flex-column container">
             <div className='container'>
-                <h2 className="">Tasks</h2>
+                <h2 className="h2">Tasks</h2>
                 <button type="button" className="btn btn-secondary mb-3 btn-sm" onClick={addButtonClick} href="#add"> Add New Task</button>
                 
                 {//console.log(Object.keys(tasks),tasks)
@@ -96,14 +99,17 @@ export default function Tasks(props) {
                             
                 {
                     Object.keys(tasks).map(t =>(
-                        <TaskView task ={tasks[t]} categories={categories} hideClose={hideClose} showClose={showClose} deleteTask={deleteTask} taskView={taskView}/>
+                        <TaskView key={tasks[t].id} task ={tasks[t]} categories={categories} hideClose={hideClose} showClose={showClose} deleteTask={deleteTask} taskView={taskView}/>
                             
                     ))
                 }
                        
                 </ul>
-                {add && <><Create type='Task' categories={categories}/></>}
-                <TaskCard task={task} categories={categories}></TaskCard>
+                <div ref={myRef}>
+                    {add && <><Create type='Task' categories={categories}/></>}
+                    {!add && !task && <p className="my-5 lead">Create a Task or Edit a Task here!</p>}
+                    <TaskCard task={task} categories={categories}></TaskCard>
+                </div>
             </div>
         </div>
     )

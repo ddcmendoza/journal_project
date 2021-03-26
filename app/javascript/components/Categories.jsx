@@ -1,9 +1,12 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useRef} from 'react'
 import Create from './Create'
 import CategoryCard from './CategoryCard'
 import { useLocation, useHistory } from "react-router-dom";
 import axios from 'axios'
 export default function Categories(props) {
+    const myRef = useRef(null)
+
+    const executeScroll = () => myRef.current.scrollIntoView() 
     const cancelToken = axios.CancelToken;
     const source = cancelToken.source();
     const location = useLocation();
@@ -12,6 +15,7 @@ export default function Categories(props) {
     const [add, setAdd] = useState(false);
     const [category, setCategory] = useState(null);
     function addButtonClick(){
+        executeScroll();
         setAdd(true);
         setCategory(null);
     }
@@ -46,6 +50,7 @@ export default function Categories(props) {
     
     function categoryView(e){
         e.preventDefault();
+        executeScroll();
         setAdd(false);
         if (e.target.type != 'delete'){
             setCategory(categories.filter(x=> x.id == e.target.id));
@@ -72,7 +77,7 @@ export default function Categories(props) {
     return (
         <div className="d-flex flex-column container">
             <div className='container'>
-                <h2 className=''>Categories</h2>
+                <h2 className='h2'>Categories</h2>
                 <button type="button" className="btn btn-secondary mb-3 btn-sm" onClick={addButtonClick}> Add New Category</button>
                 {console.log(categories)
                 }
@@ -87,8 +92,11 @@ export default function Categories(props) {
                             </a>
                         ))
                     }
-                    {add && <div className="mt-2"><Create type='Category'/></div>}
-                    <div className="mt-2"><CategoryCard category={category}></CategoryCard></div>
+                    <div ref={myRef}>
+                        {add && <div className="mt-2"><Create type='Category'/></div>}
+                        {!add && !category && <p className="my-5 lead">Create a Category or Edit a Category here!</p>}
+                        <div className="mt-2"><CategoryCard category={category}></CategoryCard></div>
+                    </div>
               </div>
             </div>
         </div>

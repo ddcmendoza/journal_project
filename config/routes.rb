@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       
       #get 'tasks/index'
       get 'tasks/index/by-user-id/:uid', to: 'tasks#by_user_id'
-      get 'tasks/index/by-category-id/:uid/:cid', to: 'tasks#by_category_id'
+      get 'tasks/index/by-category-id/:cid', to: 'tasks#by_category_id'
       post 'tasks/create'
       get 'tasks/show/:id', to: 'tasks#show'
       delete 'tasks/destroy/:id', to: 'tasks#destroy'

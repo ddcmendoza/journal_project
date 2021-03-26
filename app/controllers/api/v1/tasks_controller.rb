@@ -77,8 +77,9 @@ class Api::V1::TasksController < ApplicationController
       end
   end
   def by_category_id
-    @tasks = Task.where(user_id: params[:uid],category_id: params[:cid]).order("deadline ASC")
-    if session[:user_id] == params[:uid].to_i  
+    @tasks = Task.where(category_id: params[:cid]).order("deadline ASC")
+    @category = Category.find(params[:cid])
+    if session[:user_id] == @category.user_id  
       render json: @tasks
       else
       render json: "Invalid Request"

@@ -96,8 +96,8 @@ export default function Create(props) {
     return (
         <div className="d-flex justify-content-center  ">
             
-            <form className="container shadow-sm col-8">
-            <span class="badge bg-success mx-1">New</span>{props.type}
+            <form className="container shadow-sm col-8-md">
+            <span className="badge bg-success mx-1">New</span>{props.type}
             <div className="mb-3">
                     <label htmlFor="name" className="form-label">Name</label>
                     <input type="text" className="form-control" id="name" placeholder={props.type} onChange={onType}/>
