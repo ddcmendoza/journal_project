@@ -28,6 +28,11 @@ def is_logged_in?
       }
     end
 end
+def check
+  if logged_in?
+    redirect_to root_path
+  end
+end
 def destroy
       logout!
       render json: {

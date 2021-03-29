@@ -24,7 +24,7 @@ Rails.application.routes.draw do
       patch 'categories/update/:id', to: 'categories#update'
     end
   end
-  
+  get '/login'  => 'sessions#check'
   post '/login' => 'sessions#create'
   #post '/logout' => 'sessions#destroy'
   get '/logout' => 'sessions#destroy'
