@@ -52,7 +52,7 @@ export default function User(props) {
                             console.log('Success');
                             console.log(response);
                             history.push({
-                                pathname:'/',
+                                pathname:'/tasks',
                                 state: {
                                     logged_in: response.data.logged_in,
                                     user: response.user
@@ -102,7 +102,7 @@ export default function User(props) {
         {!isLoading &&
         <div className="container">
             
-            <Header/>
+            <Header name={name} />
             <h1>{props.type}</h1>
 {       props.type === 'Login' &&
         <div className ="text-primary">

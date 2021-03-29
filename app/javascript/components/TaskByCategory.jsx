@@ -7,6 +7,7 @@ export default function TaskByCategory(props) {
     function showClose(){};
     function taskView(){};
     function deleteTask(){};
+    
 
     useEffect(() => {
         const abCont = new AbortController();
@@ -20,7 +21,7 @@ export default function TaskByCategory(props) {
         return () => {
             abCont.abort();
         }
-    }, [props])
+    }, [props.categoryID])
     return (
         <ul>
             {console.log(tasks, props.categoryID)

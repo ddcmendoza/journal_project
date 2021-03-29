@@ -8,7 +8,7 @@ export default function Create(props) {
     const [name, setName] = useState(null);
     const [details, setDetails] = useState(null);
     const [deadline, setDeadline] = useState(null);
-    const [categoryID, setCategoryID] = useState(null);
+    const [categoryID, setCategoryID] = useState(props.categories?.length > 1? null:props.categories?.[0].id);
     
     useEffect(() => {
         return () => {
@@ -29,12 +29,17 @@ export default function Create(props) {
                 axios.post('/api/v1/tasks/create', { task }, { withCredentials: true, cancelToken: source.token })
                     .then(response => {
                         if (response.data.status === 'created') {
-                            history.push({
-                                pathname:'/tasks',
-                                state: {
-                                    add: false
-                                }
-                            })
+                            if (props.categories.length > 1) {
+                                history.push({
+                                    pathname: '/tasks',
+                                    state: {
+                                        add: false
+                                    }
+                                })
+                            }
+                            else{
+                                window.location.reload()
+                            }
                             console.log(`${name} Task created`);
                             setName(null);
                             setDetails(null);
@@ -110,7 +115,7 @@ export default function Create(props) {
                     <div>
                         <div className="mb-3">
                         <label htmlFor="category" className="form-label">Category</label>
-                        <select className="form-select" defaultValue="default" onChange={onType} id="cid">
+                        <select className="form-select" defaultValue={props.categories.length > 1?"default":props.categories[0].name} onChange={onType} id="cid">
                             <option disabled value="default">Select Category</option>
                             {
                                 props.categories?.map(cat =>(

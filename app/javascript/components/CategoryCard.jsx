@@ -1,14 +1,26 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect,useRef} from 'react'
 import axios from 'axios';
 import {  useHistory } from "react-router-dom";
 import TaskByCategory from "./TaskByCategory"
+import Create from './Create'
 export default function CategoryCard(props) {
+    const myRef = useRef(null)
+    const executeScroll = () => myRef.current.scrollIntoView() 
     const history = useHistory();
     const cancelToken = axios.CancelToken;
     const source = cancelToken.source();
     const [name,setName] = useState(props.category?.[0]?.name);
     const [details,setDetails] = useState(props.category?.[0]?.details);
+    const [add, setAdd] = useState(false);
+
+    function addButtonClick(e){
+        
+        e.preventDefault();
+        executeScroll();
+        setAdd(true);
+    }
     useEffect(() => {
+        setAdd(false);
         setName(props.category?.[0]?.name);
         setDetails(props.category?.[0]?.details);
         return () => {
@@ -68,8 +80,14 @@ export default function CategoryCard(props) {
             </form>
 }
             <div className="mt-3">
-                    {props.category && <h4 className="mb-1">Tasks </h4>}
+                    {props.category && 
+                    <h4 className="mb-1">Tasks <button type="button" className="btn btn-secondary btn-sm" onClick={addButtonClick} href="#add"> Add New Task</button></h4>}
                 <TaskByCategory categoryID={props.category?.[0]?.id}/>
+                <div ref={myRef} className="mb-5">
+                {!add && <div className="mb-5"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></div>}
+                {add && <><Create type='Task' categories={props.category}/></>}
+                </div>
+                
                 </div>
         </div>
     )

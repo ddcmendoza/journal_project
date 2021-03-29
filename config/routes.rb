@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   end
   
   post '/login' => 'sessions#create'
-  post '/logout' => 'sessions#destroy'
+  #post '/logout' => 'sessions#destroy'
   get '/logout' => 'sessions#destroy'
   get '/logged_in' => 'sessions#is_logged_in?'
 

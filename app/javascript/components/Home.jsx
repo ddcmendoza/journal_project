@@ -15,14 +15,24 @@ export default function Home(props) {
   const [user, setUser] = useState({});
   const [view, setView] = useState(null);
   useEffect(() => {
+    console.log(props)
     if(props?.logout){
-      axios.post('/logout',
+      console.log('logging out')
+      setIsLoggedIn(false);
+      setView(null);
+      setUser({});
+      /* history.push({
+        pathname: '/',
+        state: {
+          logged_in: false,
+          user: {}
+        }
+      }) */
+     axios.post('/logout',
       { withCredentials: true })
       .then(response => {
         //console.log(response)
         if(response.data.logged_out){
-          setIsLoggedIn(false);
-          setUser({});
           history.push({
             pathname:'/',
             state: {
@@ -32,7 +42,7 @@ export default function Home(props) {
         })
       }
       })
-      .catch(error => console.log('api errors:', error))
+      .catch(error => console.log('api errors:', error)) 
     }
     else{
     axios.get('/logged_in',
@@ -64,7 +74,7 @@ export default function Home(props) {
 
     <div className="jumbotron jumbotron-fluid bg-transparent">
       <div className="container secondary-color">
-       <Header/>
+       <Header name={user.name} username={user.username}/>
        { view === 'Tasks' &&
        <div>
          <Tasks isLoggedIn={isLoggedIn} user={user}/>

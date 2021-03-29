@@ -37,7 +37,11 @@ class Api::V1::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-        login!  
+        #login!
+        @category = Category.new
+        @category.name = "General"
+        @category.user_id = @user.id 
+        @category.save
         render json: {
         status: :created,
         user: @user

@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function TaskView(props) {
-    var parse = require('html-react-parser');
+
     return (
         <li key={props.task.id} id={props.task.id} onClick={props.taskView}>
             <a onMouseEnter={props.showClose} onMouseLeave={props.hideClose} key={props.task.id} id={props.task.id}>
@@ -20,7 +20,13 @@ export default function TaskView(props) {
                     ))
                 }
                 {props.task.deadline &&
-                    <div id={props.task.id} className="badge bg-warning text-dark mx-1">Due in {Math.floor((new Date(props.task.deadline).getTime() - new Date(Date.now()).getTime()) / (1000 * 60 * 60 * 24))} {(Math.floor((new Date(props.task.deadline).getTime() - new Date(Date.now()).getTime()) / (1000 * 60 * 60 * 24)) > 1) ? 'Days' : 'Day'}</div>
+                    <div id={props.task.id} className=
+                    {(getDaysAgo(props.task.deadline) > 0)? "badge bg-warning text-dark mx-1":"badge bg-danger text-light mx-1"}
+                    >
+                        Due {(getDaysAgo(props.task.deadline) > 0)?" in":""} {(getDaysAgo(props.task.deadline) > 0)? getDaysAgo(props.task.deadline):(-getDaysAgo(props.task.deadline))}  
+                        {(Math.abs(getDaysAgo(props.task.deadline)) > 1) ? ' Days' : ' Day'}
+                        {(getDaysAgo(props.task.deadline) < 0)?" ago":""}
+                        </div>
                 }
                 <p id={props.task.id} style={{whiteSpace: 'pre-line'}}>{props.task.details} </p>
 
@@ -29,4 +35,7 @@ export default function TaskView(props) {
             </a>
         </li>
     )
+}
+function getDaysAgo(date){
+   return Math.floor((new Date(date).getTime() - new Date(Date.now()).getTime()) / (1000 * 60 * 60 * 24));
 }

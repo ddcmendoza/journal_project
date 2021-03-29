@@ -7,7 +7,6 @@ import TaskView from './TaskView'
 
 export default function Tasks(props) {
     const myRef = useRef(null)
-
     const executeScroll = () => myRef.current.scrollIntoView() 
     const cancelToken = axios.CancelToken;
     const source = cancelToken.source();
@@ -94,6 +93,7 @@ export default function Tasks(props) {
                 
                 {//console.log(Object.keys(tasks),tasks)
                 }
+                {!add && !task && <p className="my-5 lead">Create a Task or Edit a Task here!</p>}
                 <ul>
                     
                             
@@ -107,7 +107,7 @@ export default function Tasks(props) {
                 </ul>
                 <div ref={myRef}>
                     {add && <><Create type='Task' categories={categories}/></>}
-                    {!add && !task && <p className="my-5 lead">Create a Task or Edit a Task here!</p>}
+                    
                     <TaskCard task={task} categories={categories}></TaskCard>
                 </div>
             </div>
