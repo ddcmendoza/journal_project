@@ -3,7 +3,9 @@ class Api::V1::CategoriesController < ApplicationController
     if !!session[:user_id]
       redirect_to action: "by_user_id", uid: session[:user_id]
     else
-      render json: "Invalid Request"
+      render json: {
+        errors: ["Invalid Request"]
+      }
     end
   end
 
@@ -46,11 +48,13 @@ class Api::V1::CategoriesController < ApplicationController
       else
         render json: {
           status: 500,
-          errors: "Error on updating the category"
+          errors: @category.errors.full_messages
       }
       end
     else
-      render json: "You don't have authorization to do that"
+      render json: {
+        errors: ["You don't have authorization to do that"]
+      }
     end
   end
 
@@ -66,11 +70,11 @@ class Api::V1::CategoriesController < ApplicationController
       }
     elsif @category.user_id != session[:user_id]
       render json:{
-        errors: "You're not allowed to do that!"
+        errors: ["You're not allowed to do that!"]
       }
     else
       render json:{
-        errors: 'Something went wrong'
+        errors: ['Something went wrong']
       }
     end
 
@@ -80,7 +84,9 @@ class Api::V1::CategoriesController < ApplicationController
     if session[:user_id] == params[:uid].to_i 
       render json: @categories
       else
-      render json: "Invalid Request"
+      render json: {
+        errors: ["Invalid Request"]
+      }
       end
   end
   private

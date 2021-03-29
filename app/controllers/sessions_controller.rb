@@ -9,10 +9,18 @@ class SessionsController < ApplicationController
         user: @user
       }
     else
-      render json: { 
-        status: 401,
-        errors: ['no such user, please try again']
-      }
+      logout!
+      if @user
+        render json: { 
+          status: 401,
+          errors: ['Wrong password or username']
+        }
+      else
+        render json: { 
+          status: 401,
+          errors: ['Username does not exist']
+        }
+      end
     end
 end
 def is_logged_in?
@@ -24,7 +32,7 @@ def is_logged_in?
     else
       render json: {
         logged_in: false,
-        message: 'no such user'
+        message: ['no such user']
       }
     end
 end
@@ -32,6 +40,7 @@ def check
   if logged_in?
     redirect_to root_path
   end
+  redirect_to root_path
 end
 def destroy
       logout!

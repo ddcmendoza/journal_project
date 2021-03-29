@@ -1,6 +1,7 @@
 import React,{useState, useEffect} from 'react'
 import {useHistory} from "react-router-dom"
 import axios from 'axios'
+import Error from './Error'
 export default function Create(props) {
     const history = useHistory();
     const cancelToken = axios.CancelToken;
@@ -9,12 +10,12 @@ export default function Create(props) {
     const [details, setDetails] = useState(null);
     const [deadline, setDeadline] = useState(null);
     const [categoryID, setCategoryID] = useState(props.categories?.length > 1? null:props.categories?.[0].id);
-    
+    const [errors, setErrors] = useState(null);
     useEffect(() => {
         return () => {
             source.cancel('Cancelling axios request/s!')
         }
-    }, [props])
+    }, [props,errors])
     function onSubmit(e){
         e.preventDefault();
         switch(props.type){
@@ -49,7 +50,7 @@ export default function Create(props) {
                         } else {
                             console.log('There was an error!')
                             console.log(response)
-                            console.log(response.data.errors)
+                            setErrors(response.data.errors)
                         }
                     })
                     .catch(error => console.log('api errors:', error));
@@ -74,7 +75,7 @@ export default function Create(props) {
                         } else {
                             console.log('There was an error!')
                             console.log(response)
-                            console.log(response.data.errors)
+                            setErrors(response.data.errors)
                         }
                     })
                     .catch(error => console.log('api errors:', error));
@@ -100,12 +101,12 @@ export default function Create(props) {
     }
     return (
         <div className="d-flex justify-content-center  ">
-            
+            <Error errors={errors}/>
             <form className="container shadow-sm col-8-md">
             <span className="badge bg-success mx-1">New</span>{props.type}
             <div className="mb-3">
                     <label htmlFor="name" className="form-label">Name</label>
-                    <input type="text" className="form-control" id="name" placeholder={props.type} onChange={onType}/>
+                    <input type="text" className="form-control" id="name" placeholder={props.type} onChange={onType} required/>
                     </div>
                 <div className="mb-3">
                     <label htmlFor="Details" className="form-label">Details</label>
@@ -115,7 +116,7 @@ export default function Create(props) {
                     <div>
                         <div className="mb-3">
                         <label htmlFor="category" className="form-label">Category</label>
-                        <select className="form-select" defaultValue={props.categories.length > 1?"default":props.categories[0].name} onChange={onType} id="cid">
+                        <select className="form-select" defaultValue={props.categories.length > 1?"default":props.categories[0].name} onChange={onType} id="cid" required>
                             <option disabled value="default">Select Category</option>
                             {
                                 props.categories?.map(cat =>(
@@ -129,7 +130,7 @@ export default function Create(props) {
                         </div>
                         <div className="mb-3">
                         <label htmlFor="deadline" className="form-label">Deadline</label>
-                        <input className="form-control" type="datetime-local" id='deadline' onChange={onType}></input>
+                        <input className="form-control" type="datetime-local" min={Date.now()} id='deadline' onChange={onType}></input>
                         </div>
                     </div>
 }

@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from 'react'
 import axios from 'axios'
+import Error from './Error'
 
 export default function Account(props) {
     console.log('important',props)
@@ -8,6 +9,7 @@ export default function Account(props) {
     const [pwtype,setPwtype] = useState('password');
     const [name,setName] = useState(props?.user?.name);
     const [pw, setPW] = useState(props?.user?.password);
+    const [errors, setErrors] = useState(null);
 
     function handleClick(e){
         e.preventDefault();
@@ -18,7 +20,7 @@ export default function Account(props) {
         e.preventDefault();
         let user = (e.target.id === 'name_edit')? {name: name}:{password:pw}
         if(e.target.id === 'password_edit' && pw.length < 6){
-            console.log('badkitty')
+            setErrors(['Password must be at least 6 characters long'])
             // throw alert
             return
         }
@@ -29,7 +31,7 @@ export default function Account(props) {
                         } else {
                             console.log('There was an error!')
                             console.log(response)
-                            console.log(response.data.errors)
+                            setErrors(response.data.errors)
                         }
                     })
                     .catch(error => console.log('api errors:', error));
@@ -50,6 +52,7 @@ export default function Account(props) {
     }, [props])
     return (
         <div>
+            <Error errors={errors}/>
             {props.isLoggedIn &&
             <form>
                 <div className="mb-3">

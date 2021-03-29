@@ -3,6 +3,7 @@ import NavBar from './NavBar'
 import React, {useState,useEffect} from 'react'
 import {Link,useHistory} from "react-router-dom"
 import axios from 'axios'
+import Error from './Error'
 export default function User(props) {
     const cancelToken = axios.CancelToken;
     const source = cancelToken.source();
@@ -12,6 +13,7 @@ export default function User(props) {
     const [name,setName] = useState(null);
     const [pw, setPW] = useState(null);
     const [username, setUsername] = useState(null);
+    const [errors, setErrors] = useState(null);
     useEffect(() => {
         setIsLoading(false);
         return () => {
@@ -36,7 +38,7 @@ export default function User(props) {
                         } else {
                             console.log('There was an error!')
                             console.log(response)
-                            console.log(response.data.errors)
+                            setErrors(response.data.errors)
                         }
                     })
                     .catch(error => console.log('api errors:', error));      
@@ -61,13 +63,13 @@ export default function User(props) {
                         } else {
                             console.log('There was an error!')
                             console.log(response)
-                            console.log(response.data.errors)
+                            setErrors(response.data.errors)
                         }
                     })
                     .catch(error => console.log('api errors:', error))
                 break;
-            case 'Update':
-                break;
+/*             case 'Update':
+                break; */
             default:
                 console.log(name,pw,username)
         }
@@ -91,6 +93,7 @@ export default function User(props) {
     }
     return (
         <div className="container">
+            <Error errors={errors}/>
             <NavBar/>
             {isLoading && 
             <div className="text-center">

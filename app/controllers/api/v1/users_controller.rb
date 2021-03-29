@@ -56,14 +56,13 @@ class Api::V1::UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    if params[:user][:name]
-      @user.update(name: params[:user][:name])
-    elsif params[:user][:password]
-      @user.update(password: params[:user][:password])
-    end
-
-    if session[:user_id] == params[:id]
-      if@user.save
+    if session[:user_id] == params[:id].to_i
+      if params[:user][:name]
+        @user.update(name: params[:user][:name])
+      elsif params[:user][:password]
+        @user.update(password: params[:user][:password])
+      end
+      if @user.save
         render json: {
           status: :updated,
           user: @user
@@ -71,11 +70,13 @@ class Api::V1::UsersController < ApplicationController
       else
         render json: {
           status: 500,
-          errors: @user.errors.full_messages,
+          errors: @user.errors.full_messages          
       }
       end
     else
-      render json: "You don't have authorization to do that"
+      render json: {
+        errors: ["You don't have authorization to do that"]
+      }
     end
 
   end

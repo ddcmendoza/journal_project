@@ -4,6 +4,7 @@ import { useLocation, useHistory } from "react-router-dom";
 import axios from 'axios'
 import TaskCard from './TaskCard'
 import TaskView from './TaskView'
+import Error from './Error'
 
 export default function Tasks(props) {
     const myRef = useRef(null)
@@ -16,8 +17,8 @@ export default function Tasks(props) {
     const [add, setAdd] = useState(false);
     const [categories, setCategories] = useState([]);
     const [task, setTask] = useState(null);
-    function addButtonClick(){
 
+    function addButtonClick(){
         executeScroll();
         setAdd(true);
         setTask(null);
@@ -80,7 +81,7 @@ export default function Tasks(props) {
             setTasks(t_json);
             console.log('fetching')
         }
-        fetchTasks()
+        fetchTasks();
         return () => {
             abCont.abort();
         }
@@ -93,7 +94,7 @@ export default function Tasks(props) {
                 
                 {//console.log(Object.keys(tasks),tasks)
                 }
-                {!add && !task && <p className="my-5 lead">Create a Task or Edit a Task here!</p>}
+                {!add && !task && <p className="my-1 lead">Create a Task or Edit a Task here!</p>}
                 <ul>
                     
                             

@@ -1,6 +1,7 @@
 import React, {useState,useEffect} from 'react'
 import axios from 'axios';
 import {  useHistory } from "react-router-dom";
+import Error from './Error'
 export default function TaskCard(props) {
     const history = useHistory();
     const cancelToken = axios.CancelToken;
@@ -9,6 +10,7 @@ export default function TaskCard(props) {
     const [details,setDetails] = useState(props.task?.[0]?.details);
     const [deadline, setDeadline] = useState(props.task?.[0]?.deadline);
     const [categoryID, setCategoryID] = useState(props.task?.[0]?.category_id);
+    const [errors, setErrors] = useState(null)
     
     useEffect(() => {
         console.log(props.task)
@@ -19,7 +21,7 @@ export default function TaskCard(props) {
         return () => {
             source.cancel('Cancelling axios request/s!')
         }
-    }, [props])
+    }, [props,errors])
     function onSubmit(e){
         e.preventDefault();
         const task = {
@@ -42,7 +44,7 @@ export default function TaskCard(props) {
                         } else {
                             console.log('There was an error!')
                             console.log(response)
-                            console.log(response.data.errors)
+                            setErrors(response.data.errors)
                         }
                     })
                     .catch(error => console.log('api errors:', error));
@@ -64,6 +66,7 @@ export default function TaskCard(props) {
     }
     return (
         <div className=" d-flex justify-content-center ">
+            <Error errors={errors}/>
             {//console.log(categoryID)
             }
             {props.task &&

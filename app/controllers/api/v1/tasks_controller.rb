@@ -39,16 +39,18 @@ class Api::V1::TasksController < ApplicationController
         render json: {
           status: :updated,
           category: @task,
-          session: session
         }
       else
         render json: {
           status: 500,
-          errors: "Error on updating the category"
+          errors: @task.errors.full_messages
+         # errors: ["Error on updating the task"]
       }
       end
     else
-      render json: "You don't have authorization to do that"
+      render json: {
+       errors: ["You don't have authorization to do that"]
+      }
     end
   end
 
@@ -60,11 +62,11 @@ class Api::V1::TasksController < ApplicationController
       }
     elsif @task.user_id != session[:user_id]
       render json:{
-        errors: "You're not allowed to do that!"
+        errors: ["You're not allowed to do that!"]
       }
     else
       render json:{
-        errors: 'Something went wrong'
+        errors: ['Something went wrong']
       }
     end
   end
@@ -73,7 +75,9 @@ class Api::V1::TasksController < ApplicationController
     if session[:user_id] == params[:uid].to_i 
       render json: @tasks
       else
-      render json: "Invalid Request"
+      render json: {
+        errors: ["Invalid Request"]
+      }
       end
   end
   def by_category_id
@@ -82,7 +86,9 @@ class Api::V1::TasksController < ApplicationController
     if session[:user_id] == @category.user_id  
       render json: @tasks
       else
-      render json: "Invalid Request"
+      render json: {
+         errors: ["Invalid Request"]
+        }
     end
   end
   private
