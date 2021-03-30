@@ -20,7 +20,7 @@ class Api::V1::CategoriesController < ApplicationController
 
   def create
     @category = Category.new(category_params)
-    @category.user_id = session[:user_id]
+    @category.user = User.find(session[:user_id])
     if @category.save && !!session[:user_id]
         render json: {
         status: :created,

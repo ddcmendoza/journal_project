@@ -14,7 +14,8 @@ class Api::V1::TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    @task.user_id = session[:user_id]
+    @task.category = Category.find(@task.category_id)
+    @task.user = User.find(session[:user_id])
     if @task.save && !!session[:user_id]
         render json: {
         status: :created,
@@ -33,7 +34,7 @@ class Api::V1::TasksController < ApplicationController
     @task.name = params[:task][:name]
     @task.details = params[:task][:details]
     @task.deadline = params[:task][:deadline]
-    @task.category_id = params[:task][:category_id]
+    @task.category = Category.find(params[:task][:category_id])
     if session[:user_id].to_i == @task[:user_id].to_i
       if @task.save
         render json: {

@@ -1,6 +1,7 @@
 class Task < ApplicationRecord
     validates :name, presence: true
     belongs_to :category
+    belongs_to :user
     validate :deadline_after_now
 
     def deadline_after_now
