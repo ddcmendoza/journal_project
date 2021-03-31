@@ -14,9 +14,9 @@ class Api::V1::TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    @task.category = Category.find(@task.category_id)
     @task.user = User.find(session[:user_id])
     if @task.save && !!session[:user_id]
+        @task.category = Category.find(@task.category_id)
         render json: {
         status: :created,
         task: @task

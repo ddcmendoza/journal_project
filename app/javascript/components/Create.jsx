@@ -11,12 +11,14 @@ export default function Create(props) {
     const [deadline, setDeadline] = useState(null);
     const [categoryID, setCategoryID] = useState(props.categories?.length > 1? null:props.categories?.[0].id);
     const [errors, setErrors] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
     useEffect(() => {
         return () => {
             source.cancel('Cancelling axios request/s!')
         }
     }, [props,errors])
     function onSubmit(e){
+        setSubmitting(true);
         e.preventDefault();
         switch(props.type){
             case "Task":
@@ -29,6 +31,7 @@ export default function Create(props) {
                 
                 axios.post('/api/v1/tasks/create', { task }, { withCredentials: true, cancelToken: source.token })
                     .then(response => {
+                        setSubmitting(false);
                         if (response.data.status === 'created') {
                             if (props.categories.length > 1) {
                                 history.push({
@@ -53,7 +56,10 @@ export default function Create(props) {
                             setErrors(response.data.errors)
                         }
                     })
-                    .catch(error => console.log('api errors:', error));
+                    .catch(error => {
+                        console.log('api errors:', error);
+                        setSubmitting(false);
+                    });
                 break;
             case "Category":
                 let category = {
@@ -62,6 +68,7 @@ export default function Create(props) {
                 }
                 axios.post('/api/v1/categories/create', { category }, { withCredentials: true, cancelToken: source.token })
                     .then(response => {
+                        setSubmitting(false);
                         if (response.data.status === 'created') {
                             history.push({
                                 pathname:'/categories',
@@ -78,7 +85,10 @@ export default function Create(props) {
                             setErrors(response.data.errors)
                         }
                     })
-                    .catch(error => console.log('api errors:', error));
+                    .catch(error => {
+                        console.log('api errors:', error);
+                        setSubmitting(false);
+                    });
                 break;
             default:
 
@@ -134,7 +144,13 @@ export default function Create(props) {
                         </div>
                     </div>
 }
-                    <input type='submit' className="btn btn-success mb-2" onClick={onSubmit}></input>
+{
+    !submitting && <input type='submit' className="btn btn-success mb-2" onClick={onSubmit}></input>
+}
+{
+    submitting && <input type='submit' className="btn btn-success mb-2" onClick={onSubmit} disabled></input>
+}
+                    
             </form>
         </div>
     )
