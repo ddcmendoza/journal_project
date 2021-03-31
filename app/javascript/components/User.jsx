@@ -135,7 +135,9 @@ export default function User(props) {
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
                     <div className="d-flex align-items-stretch justify-content-evenly">
-                        <input type={pwtype} className="form-control col-9" id="password" onChange={onType} defaultValue="password" />
+                        <div className="col-9">
+                            <input type={pwtype} className="form-control" id="password" onChange={onType} defaultValue="password" />
+                            </div>
                         <a className='btn btn-primary mx-1 col-3' onClick={handleClick}>Show Password</a>
                     </div>
                     </div>
