@@ -20,7 +20,7 @@ export default function Categories(props) {
         setCategory(null);
     }
     function showClose(e){
-        e.target.children[1].classList.remove('visually-hidden');
+        e.target?.children[1]?.classList?.remove('visually-hidden');
     }
     function hideClose(e){
         e.target.children[1].classList.add('visually-hidden');
@@ -85,7 +85,7 @@ export default function Categories(props) {
               <div>
                     {
                         Object.keys(categories).map(c =>(
-                            <a key={categories[c].id} id={categories[c].id} className='align-items-center btn btn-outline-secondary mr-2 mb-2' role='button' onMouseEnter={showClose} onMouseLeave={hideClose} onClick={categoryView}>
+                            <a key={categories[c].id} id={categories[c].id} className='align-items-center btn btn-outline-secondary ms-2 mb-2' role='button' onMouseEnter={showClose} onMouseLeave={hideClose} onClick={categoryView}>
                                 <p className="p-0 m-0 d-inline" id={categories[c].id}>{categories[c].name}</p>
                                 <button type="button" className="btn-close btn-close-white ml-1 visually-hidden" aria-label="Close" role="button" id={categories[c].id} onClick={deleteCategory} type="delete">
                                 </button>
