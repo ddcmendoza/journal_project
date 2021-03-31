@@ -9,7 +9,7 @@
     "@rails/webpacker": "5.2.1",
     "axios": "^0.21.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
-    "bootstrap": "^4.6.0",
+    "bootstrap": "^5.0.0-beta3",
     "html-react-parser": "^1.2.4",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
