@@ -32,6 +32,7 @@ export default function User(props) {
                 }
                 axios.post('/api/v1/users/create', { user }, { withCredentials: true, cancelToken: source.token })
                     .then(response => {
+                        console.log(user,response);
                         if (response.data.status === 'created') {
                             console.log('Congratulations! You registered!')
                             history.push('/login');
