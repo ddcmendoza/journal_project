@@ -64,14 +64,14 @@ export default function Account(props) {
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Name</label>
                     <div className="d-flex align-items-stretch justify-content-evenly"> 
-                       <input type='text' className="form-control col-10" id="name" placeholder={props.user.name} defaultValue={props.user.name} onChange={onType}/>
+                       <div className="col-10"><input type='text' className="form-control col-10" id="name" placeholder={props.user.name} defaultValue={props.user.name} onChange={onType}/></div>
                        <button className='btn btn-info mx-1 col-2' type='submit' onClick={onSubmit} id="name_edit">Edit Name</button>
                        </div>
                     </div>
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
                     <div className="d-flex align-items-stretch justify-content-evenly">
-                        <input type={pwtype} className="form-control col-8" id="password" onChange={onType} placeholder={props.user.password} />
+                        <div className="col-8"><input type={pwtype} className="form-control col-8" id="password" onChange={onType} placeholder={props.user.password} /></div>
                         <a className='btn btn-primary ml-1 col-2' onClick={handleClick}>Show Password</a>
                         <button className='btn btn-info mx-1 col-2' type='submit' onClick={onSubmit} id="password_edit">Edit Password</button>
                     </div>
