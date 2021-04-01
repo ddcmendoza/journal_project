@@ -30,9 +30,10 @@ export default function User(props) {
                     name: name,
                     password: pw
                 }
+                console.log(user);
                 axios.post('/api/v1/users/create', { user }, { withCredentials: true, cancelToken: source.token })
                     .then(response => {
-                        console.log(user,response);
+                        
                         if (response.data.status === 'created') {
                             console.log('Congratulations! You registered!')
                             history.push('/login');
