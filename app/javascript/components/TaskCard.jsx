@@ -13,7 +13,7 @@ export default function TaskCard(props) {
     const [errors, setErrors] = useState(null)
     
     useEffect(() => {
-        console.log(props.task)
+        //console.log(props.task)
         setName(props.task?.[0]?.name);
         setDetails(props.task?.[0]?.details);
         setCategoryID(props.task?.[0]?.category_id);

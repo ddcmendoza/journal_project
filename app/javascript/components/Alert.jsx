@@ -13,7 +13,8 @@ export default function Alert(props) {
                
             </>
             }
-            {console.log(props)}
+            {//console.log(props)
+            }
             </>
     )
 }

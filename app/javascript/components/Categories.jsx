@@ -79,7 +79,7 @@ export default function Categories(props) {
             <div className='container'>
                 <h2 className='h2'>Categories</h2>
                 <button type="button" className="btn btn-secondary mb-3 btn-sm" onClick={addButtonClick}> Add New Category</button>
-                {console.log(categories)
+                {//console.log(categories)
                 }
 
               <div>

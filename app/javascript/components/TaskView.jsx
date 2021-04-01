@@ -28,7 +28,7 @@ export default function TaskView(props) {
                         {(getDaysAgo(props.task.deadline) < 0)?" ago":""}
                         </div>
                 }
-                <p id={props.task.id} style={{whiteSpace: 'pre-line'}}>{props.task.details} </p>
+                <p id={props.task.id} style={{whiteSpace: 'pre-line'}}>{props.task.details?.slice(0,50).concat(  (props.task.details?.length > 50)? "...":"")} </p>
 
                 <input type="text" className="visually-hidden"></input>
                 <textarea className="visually-hidden"></textarea>

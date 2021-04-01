@@ -15,7 +15,7 @@ export default function Home(props) {
   const [user, setUser] = useState({});
   const [view, setView] = useState(null);
   useEffect(() => {
-    console.log(props)
+    //console.log(props)
     if(props?.logout){
       console.log('logging out')
       setIsLoggedIn(false);

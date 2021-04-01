@@ -24,7 +24,7 @@ export default function TaskByCategory(props) {
     }, [props.categoryID])
     return (
         <ul>
-            {console.log(tasks, props.categoryID)
+            {//console.log(tasks, props.categoryID)
             }
             {
                     Object.keys(tasks).map(t =>(

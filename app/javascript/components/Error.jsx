@@ -13,7 +13,8 @@ export default function Error(props) {
                
             </>
             }
-            {console.log(props)}
+            {//console.log(props)
+            }
             </>
     )
 }

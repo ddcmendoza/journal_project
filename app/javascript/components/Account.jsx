@@ -3,7 +3,7 @@ import axios from 'axios'
 import Error from './Error'
 
 export default function Account(props) {
-    console.log('important',props)
+    //console.log('important',props)
     const cancelToken = axios.CancelToken;
     const source = cancelToken.source();
     const [pwtype,setPwtype] = useState('password');

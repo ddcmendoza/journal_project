@@ -30,7 +30,7 @@ export default function User(props) {
                     name: name,
                     password: pw
                 }
-                console.log(user);
+                //console.log(user);
                 axios.post('/api/v1/users/create', { user }, { withCredentials: true, cancelToken: source.token })
                     .then(response => {
                         
