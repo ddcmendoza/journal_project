@@ -17,7 +17,7 @@ export default function TaskByCategory(props) {
             setTasks(t_json);
             console.log('fetching')
         }
-        fetchTasks();
+        if(props.categoryID) fetchTasks();
         return () => {
             abCont.abort();
         }
