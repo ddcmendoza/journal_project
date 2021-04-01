@@ -40,7 +40,7 @@ class Api::V1::UsersController < ApplicationController
         #login!
         @category = Category.new
         @category.name = "General"
-        @category.user_id = @user.id 
+        @category.user = @user
         @category.save
         render json: {
         status: :created,
