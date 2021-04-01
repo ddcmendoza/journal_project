@@ -5,7 +5,7 @@ class User < ApplicationRecord
     validates :username, uniqueness: true
     validates :username, length: {minimum: 4}
     validates :username, length: {maximum: 32}
-    validates :password_digest, presence: true
+    #validates :password_digest, presence: true
     #validate :password_must_exist
     has_many  :tasks
     has_many :categories
