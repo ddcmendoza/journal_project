@@ -2,6 +2,7 @@ import React,{useState, useEffect} from 'react'
 import {useHistory} from "react-router-dom"
 import axios from 'axios'
 import Error from './Error'
+import Alert from './Alert'
 export default function Create(props) {
     const history = useHistory();
     const cancelToken = axios.CancelToken;
@@ -11,6 +12,7 @@ export default function Create(props) {
     const [deadline, setDeadline] = useState(null);
     const [categoryID, setCategoryID] = useState(props.categories?.length > 1? null:props.categories?.[0].id);
     const [errors, setErrors] = useState(null);
+    const [alerts, setAlerts] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     useEffect(() => {
         return () => {
@@ -37,14 +39,15 @@ export default function Create(props) {
                                 history.push({
                                     pathname: '/tasks',
                                     state: {
-                                        add: false
+                                        add: false,
+                                        alerts: [`${name.slice(0,20)} Task created`]
                                     }
                                 })
                             }
                             else{
                                 window.location.reload()
                             }
-                            console.log(`${name} Task created`);
+                            setAlerts(`${name} Task created`);
                             setName(null);
                             setDetails(null);
                             setDeadline(null);
@@ -70,15 +73,15 @@ export default function Create(props) {
                     .then(response => {
                         setSubmitting(false);
                         if (response.data.status === 'created') {
+                            setName(null);
+                            setDetails(null);
                             history.push({
                                 pathname:'/categories',
                                 state: {
-                                    add: false
+                                    add: false,
+                                    alerts: [`${name.slice(0,20)} Category created`]
                                 }
                             })
-                            console.log(`${name} Category created`);
-                            setName(null);
-                            setDetails(null);
                         } else {
                             console.log('There was an error!')
                             console.log(response)
@@ -108,10 +111,14 @@ export default function Create(props) {
         else if(e.target.id === 'cid'){
             setCategoryID(e.target.value)
         }
+        setErrors(null);
+        setAlerts(null);
     }
     return (
         <div className="d-flex justify-content-center  ">
             <Error errors={errors}/>
+            <Alert alerts={alerts}/>
+
             <form className="container shadow-sm col-8-md">
             <span className="badge bg-success mx-1">New</span>{props.type}
             <div className="mb-3">

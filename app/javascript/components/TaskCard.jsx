@@ -2,6 +2,7 @@ import React, {useState,useEffect} from 'react'
 import axios from 'axios';
 import {  useHistory } from "react-router-dom";
 import Error from './Error'
+import Alert from './Alert'
 export default function TaskCard(props) {
     const history = useHistory();
     const cancelToken = axios.CancelToken;
@@ -11,6 +12,7 @@ export default function TaskCard(props) {
     const [deadline, setDeadline] = useState(props.task?.[0]?.deadline);
     const [categoryID, setCategoryID] = useState(props.task?.[0]?.category_id);
     const [errors, setErrors] = useState(null)
+    const [alerts, setAlerts] = useState(null)
     
     useEffect(() => {
         //console.log(props.task)
@@ -33,7 +35,7 @@ export default function TaskCard(props) {
         axios.patch(`/api/v1/tasks/update/${props?.task?.[0]?.id}`, { task }, { withCredentials: true, cancelToken: source.token })
                     .then(response => {
                         if (response.data.status === 'updated') {
-                            console.log('Congratulations! task updated!')
+                            setAlerts(['Congratulations! Task updated!'])
                             history.push({
                                 pathname:'/tasks',
                                 state: {
@@ -63,10 +65,13 @@ export default function TaskCard(props) {
         else if(e.target.id === 'cid'){
             setCategoryID(e.target.value)
         }
+        setAlerts(null);
+        setErrors(null);
     }
     return (
         <div className=" d-flex justify-content-center ">
             <Error errors={errors}/>
+            <Alert alerts={alerts}/>
             {//console.log(categoryID)
             }
             {props.task &&

@@ -1,12 +1,14 @@
 import Header from './Header'
 import NavBar from './NavBar'
 import React, {useState,useEffect} from 'react'
-import {Link,useHistory} from "react-router-dom"
+import {Link,useHistory,useLocation} from "react-router-dom"
 import axios from 'axios'
 import Error from './Error'
+import Alert from './Alert'
 export default function User(props) {
     const cancelToken = axios.CancelToken;
     const source = cancelToken.source();
+    const location = useLocation();
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(true);
     const [pwtype, setPwtype] = useState('password');
@@ -14,8 +16,12 @@ export default function User(props) {
     const [pw, setPW] = useState(null);
     const [username, setUsername] = useState(null);
     const [errors, setErrors] = useState(null);
+    const [alerts, setAlerts] = useState(location?.state?.alerts? location.state.alerts:null);
     useEffect(() => {
         setIsLoading(false);
+        setAlerts(location?.state?.alerts? location.state.alerts:null);
+        setErrors(null);
+
         return () => {
             source.cancel('Cancelling axios request/s!')
         }
@@ -35,8 +41,13 @@ export default function User(props) {
                     .then(response => {
                         
                         if (response.data.status === 'created') {
-                            console.log('Congratulations! You registered!')
-                            history.push('/login');
+                            setAlerts(['Congratulations! You registered!'])
+                            history.push({
+                                pathname:'/login',
+                                state: {
+                                    alerts: alerts
+                                }
+                            });
                         } else {
                             console.log('There was an error!')
                             console.log(response)
@@ -53,7 +64,7 @@ export default function User(props) {
                 axios.post('/login', { user }, { withCredentials: true , cancelToken: source.token})
                     .then(response => {
                         if (response.data.logged_in) {
-                            console.log('Success');
+                            setAlerts(['Success']);
                             console.log(response);
                             history.push({
                                 pathname:'/tasks',
@@ -77,6 +88,7 @@ export default function User(props) {
         }
     }
     function onType(e){
+        
         e.preventDefault();
         if (e.target.id === 'username'){
             setUsername(e.target.value);
@@ -87,6 +99,8 @@ export default function User(props) {
         else if(e.target.id === 'password'){
             setPW(e.target.value);
         }
+        setAlerts(null);
+        setErrors(null);
     }
     function handleClick(e){
         e.preventDefault();
@@ -96,6 +110,7 @@ export default function User(props) {
     return (
         <div className="container">
             <Error errors={errors}/>
+            <Alert alerts={alerts}/>
             <NavBar/>
             {isLoading && 
             <div className="text-center">

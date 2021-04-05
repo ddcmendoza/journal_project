@@ -4,7 +4,7 @@ import { useLocation, useHistory } from "react-router-dom";
 import axios from 'axios'
 import TaskCard from './TaskCard'
 import TaskView from './TaskView'
-import Error from './Error'
+import Alert from './Alert'
 
 export default function Tasks(props) {
     const myRef = useRef(null)
@@ -17,14 +17,17 @@ export default function Tasks(props) {
     const [add, setAdd] = useState(false);
     const [categories, setCategories] = useState([]);
     const [task, setTask] = useState(null);
+    const [alerts, setAlerts] = useState(location?.state?.alerts? location.state.alerts:null);
 
     function addButtonClick(){
         executeScroll();
+        setAlerts(null);
         setAdd(true);
         setTask(null);
     }    
     function deleteTask(e){
         e.preventDefault();
+        setAlerts(null);
         const task_id = e.target.id;
         axios.delete(`/api/v1/tasks/destroy/${task_id}`, { withCredentials: true, cancelToken: source.token })
                     .then(response => {
@@ -52,6 +55,7 @@ export default function Tasks(props) {
     }
     function taskView(e){
         e.preventDefault();
+        setAlerts(null);
         executeScroll();
         setAdd(false);
         if (e.target.type != 'delete'){
@@ -59,7 +63,7 @@ export default function Tasks(props) {
         }
     }
     useEffect(() => {
-        
+        setAlerts(location?.state?.alerts? location.state.alerts:null);
         if (location?.state){
             setAdd(location.state.add);
             setTask(location.state.task);
@@ -67,16 +71,14 @@ export default function Tasks(props) {
 
         const abCont = new AbortController();
         const fetchCategories = async() =>{
-            let c = await fetch(`/api/v1/categories/index/`,{signal: abCont.signal}).catch(error => console.log('api errors:', error));
+            let c = await fetch(`/api/v1/categories/index/`,{signal: abCont.signal,withCredentials: true}).catch(error => console.log('api errors:', error));
             let c_json = await c?.json();
             setCategories(c_json? c_json:[]);
             console.log('fetching')
         }
         fetchCategories();
         const fetchTasks = async() =>{
-            let t = await fetch(`/api/v1/tasks/index/by-user-id/${props.user.id}`,{
-                signal: abCont.signal,
-                });
+            let t = await fetch(`/api/v1/tasks/index/by-user-id/${props.user.id}`,{signal: abCont.signal, withCredentials: true});
             let t_json = await t.json();
             setTasks(t_json);
             console.log('fetching')
@@ -88,27 +90,22 @@ export default function Tasks(props) {
     }, [props])
     return (
         <div className="d-flex flex-column container">
+            <Alert alerts={alerts}/>
             <div className='container'>
                 <h2 className="h2">Tasks</h2>
                 <button type="button" className="btn btn-secondary mb-3 btn-sm" onClick={addButtonClick} href="#add"> Add New Task</button>
-                
-                {//console.log(Object.keys(tasks),tasks)
+                {//console.log(alerts)
                 }
                 {!add && !task && <p className="my-1 lead">Create a Task or Edit a Task here!</p>}
                 <ul>
-                    
-                            
                 {
                     Object.keys(tasks).map(t =>(
                         <TaskView key={tasks[t].id} task ={tasks[t]} categories={categories} hideClose={hideClose} showClose={showClose} deleteTask={deleteTask} taskView={taskView}/>
-                            
                     ))
                 }
-                       
                 </ul>
                 <div ref={myRef}>
                     {add && <><Create type='Task' categories={categories}/></>}
-                    
                     <TaskCard task={task} categories={categories}></TaskCard>
                 </div>
             </div>

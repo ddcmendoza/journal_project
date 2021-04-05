@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Alert(props) {
     return (
-            <>{props.alerts && 
+            <>{props?.alerts && 
                 
             <>
                 {props.alerts?.map(a =>(

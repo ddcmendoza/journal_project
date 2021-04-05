@@ -1,6 +1,7 @@
 import React,{useState, useEffect} from 'react'
 import axios from 'axios'
 import Error from './Error'
+import Alert from './Alert'
 
 export default function Account(props) {
     //console.log('important',props)
@@ -10,6 +11,7 @@ export default function Account(props) {
     const [name,setName] = useState(props?.user?.name);
     const [pw, setPW] = useState(props?.user?.password);
     const [errors, setErrors] = useState(null);
+    const [alerts, setAlerts] = useState(null);
 
     function handleClick(e){
         e.preventDefault();
@@ -27,7 +29,8 @@ export default function Account(props) {
         axios.patch(`/api/v1/users/update/${props?.user?.id}`, { user }, { withCredentials: true, cancelToken: source.token })
                     .then(response => {
                         if (response.data.status === 'updated') {
-                            console.log('Congratulations! Account updated!')
+
+                            setAlerts(['Congratulations! Account updated!']);
                         } else {
                             console.log('There was an error!')
                             console.log(response)
@@ -37,6 +40,8 @@ export default function Account(props) {
                     .catch(error => console.log('api errors:', error));
     }
     function onType(e){
+        setErrors(null);
+        setAlerts(null);
         e.preventDefault();
         if(e.target.id === 'name'){
             setName(e.target.value);
@@ -46,12 +51,15 @@ export default function Account(props) {
         }
     }
     useEffect(() => {
+        setErrors(null);
+        setAlerts(null);
         return () => {
             source.cancel("Cancelling request!");
         }
     }, [props])
     return (
         <div>
+            <Alert alerts={alerts}/>
             <Error errors={errors}/>
             {props.isLoggedIn &&
             <form>
@@ -71,8 +79,8 @@ export default function Account(props) {
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
                     <div className="d-flex align-items-stretch justify-content-evenly">
-                        <div className="col-8"><input type={pwtype} className="form-control col-8" id="password" onChange={onType} placeholder={props.user.password} /></div>
-                        <a className='btn btn-primary ml-1 col-2' onClick={handleClick}>Show Password</a>
+                        <div className="col-10"><input type={pwtype} className="form-control" id="password" onChange={onType} placeholder={props.user.password} /></div>
+                        {/* <a className='btn btn-primary mx-1 col-2' onClick={handleClick}>Show Password</a> */}
                         <button className='btn btn-info mx-1 col-2' type='submit' onClick={onSubmit} id="password_edit">Edit Password</button>
                     </div>
                     </div>
