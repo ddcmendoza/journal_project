@@ -23,8 +23,9 @@ export default function TaskView(props) {
                     <div id={props.task.id} className=
                     {(getDaysAgo(props.task.deadline) > 0)? "badge bg-warning text-dark mx-1":"badge bg-danger text-light mx-1"}
                     >
-                        Due {(getDaysAgo(props.task.deadline) > 0)?" in":""} {(getDaysAgo(props.task.deadline) > 0)? getDaysAgo(props.task.deadline):(-getDaysAgo(props.task.deadline))}  
-                        {(Math.abs(getDaysAgo(props.task.deadline)) > 1) ? ' Days' : ' Day'}
+                        Due{(getDaysAgo(props.task.deadline) > 0)?" in ":""} 
+                        {(getDaysAgo(props.task.deadline) == 0)? "":(getDaysAgo(props.task.deadline) > 0)? getDaysAgo(props.task.deadline):(-getDaysAgo(props.task.deadline))}  
+                        {(Math.abs(getDaysAgo(props.task.deadline)) > 1) ? ' Days' :(Math.abs(getDaysAgo(props.task.deadline)) == 0)? ' Today': ' Day'}
                         {(getDaysAgo(props.task.deadline) < 0)?" ago":""}
                         </div>
                 }
