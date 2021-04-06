@@ -96,7 +96,7 @@ export default function Tasks(props) {
                 <button type="button" className="btn btn-secondary mb-3 btn-sm" onClick={addButtonClick} href="#add"> Add New Task</button>
                 {//console.log(alerts)
                 }
-                {!add && !task && <p className="my-1 lead">Create a Task or Edit a Task here!</p>}
+                {!add && !task && <p className="my-1 lead">Create or Edit a Task here!</p>}
                 <ul>
                 {
                     Object.keys(tasks).map(t =>(

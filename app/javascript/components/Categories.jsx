@@ -102,7 +102,7 @@ export default function Categories(props) {
                     }
                     <div ref={myRef}>
                         {add && <div className="mt-2"><Create type='Category'/></div>}
-                        {!add && !category && <p className="my-5 lead">Create a Category or Edit a Category here!</p>}
+                        {!add && !category && <p className="my-5 lead">Create or Edit a Category here!</p>}
                         <div className="mt-2"><CategoryCard category={category}></CategoryCard></div>
                     </div>
               </div>
