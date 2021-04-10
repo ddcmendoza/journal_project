@@ -52,7 +52,6 @@ export default function Create(props) {
                             setDetails(null);
                             setDeadline(null);
                             setCategoryID(null);
-                            setCategories({});
                         } else {
                             console.log('There was an error!')
                             console.log(response)
