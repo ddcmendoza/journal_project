@@ -27,25 +27,28 @@ export default function Tasks(props) {
     }    
     function deleteTask(e){
         e.preventDefault();
-        setAlerts(null);
-        const task_id = e.target.id;
-        axios.delete(`/api/v1/tasks/destroy/${task_id}`, { withCredentials: true, cancelToken: source.token })
-                    .then(response => {
-                        if (response.data.status === 'deleted') {
-                            history.push({
-                                pathname:'/tasks',
-                                state: {
-                                    add: false
-                                }
-                            })
-                            console.log(`${task_id} Task deleted`);
-                        } else {
-                            console.log('There was an error!')
-                            console.log(response)
-                            console.log(response.data.errors)
-                        }
-                    })
-                    .catch(error => console.log('api errors:', error));
+        let c = confirm("Are you sure?");
+        if (c){
+            setAlerts(null);
+            const task_id = e.target.id;
+            axios.delete(`/api/v1/tasks/destroy/${task_id}`, { withCredentials: true, cancelToken: source.token })
+                        .then(response => {
+                            if (response.data.status === 'deleted') {
+                                history.push({
+                                    pathname:'/tasks',
+                                    state: {
+                                        add: false
+                                    }
+                                })
+                                console.log(`${task_id} Task deleted`);
+                            } else {
+                                console.log('There was an error!')
+                                console.log(response)
+                                console.log(response.data.errors)
+                            }
+                        })
+                        .catch(error => console.log('api errors:', error));
+                }
     }
     function showClose(e){
         e.target.children[0].classList.remove('visually-hidden');

@@ -31,25 +31,28 @@ export default function Categories(props) {
     }
     function deleteCategory(e){
         e.preventDefault();
+        let c = confirm("Are you sure?");
+        if(c){
         setAlerts(null);
-        const category_id = e.target.id;
-        axios.delete(`/api/v1/categories/destroy/${category_id}`, { withCredentials: true, cancelToken: source.token })
-                    .then(response => {
-                        if (response.data.status === 'deleted') {
-                            history.push({
-                                pathname:'/categories',
-                                state: {
-                                    add: false
-                                }
-                            })
-                            console.log(`${category_id} Category deleted`);
-                        } else {
-                            console.log('There was an error!')
-                            console.log(response)
-                            console.log(response.data.errors)
-                        }
-                    })
-                    .catch(error => console.log('api errors:', error));
+            const category_id = e.target.id;
+            axios.delete(`/api/v1/categories/destroy/${category_id}`, { withCredentials: true, cancelToken: source.token })
+                        .then(response => {
+                            if (response.data.status === 'deleted') {
+                                history.push({
+                                    pathname:'/categories',
+                                    state: {
+                                        add: false
+                                    }
+                                })
+                                console.log(`${category_id} Category deleted`);
+                            } else {
+                                console.log('There was an error!')
+                                console.log(response)
+                                console.log(response.data.errors)
+                            }
+                        })
+                        .catch(error => console.log('api errors:', error));
+                }
 
     }
     
