@@ -1,8 +1,9 @@
 class Task < ApplicationRecord
     validates :name, presence: true
+    validate :deadline_after_now
+    
     belongs_to :category
     belongs_to :user
-    validate :deadline_after_now
 
     def deadline_after_now
         return if deadline.blank?

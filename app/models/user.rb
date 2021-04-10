@@ -6,8 +6,8 @@ class User < ApplicationRecord
     validates :username, length: {minimum: 4}
     validates :username, length: {maximum: 32}
     validates :password_digest, presence: true
-    has_many  :tasks
-    has_many :categories
+    has_many  :tasks, dependent: :destroy
+    has_many :categories, dependent: :destroy
 
 end
 
