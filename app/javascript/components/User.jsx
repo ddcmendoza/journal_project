@@ -158,7 +158,7 @@ export default function User(props) {
                         <a className='btn btn-primary mx-1 col-3' onClick={handleClick}>Show Password</a>
                     </div>
                     </div>
-                    <input type='submit' className="btn btn-info" onClick={onSubmit}></input>
+                    <input type='submit' className="btn btn-info text-light" onClick={onSubmit}></input>
             </form>
         </div>
 }
